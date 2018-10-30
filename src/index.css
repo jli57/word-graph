@@ -12,3 +12,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.node > circle {
+  fill: #dddddd;
+  stroke: #777777;
+  stroke-width: 2px;
+}
+
+.node > text {
+  font-family: sans-serif;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.link {
+  stroke: #dddddd;
+  stroke-width: 4px;
+}
