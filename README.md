@@ -25,6 +25,10 @@ WordCloud will allow users to:
 * Cola to layout graphs in a bounded canvas.
 * Webpack to bundle and serve up various scripts.
 
+### Wireframe
+
+<img src="./docs/wireframe.png" width="600px"/>
+
 ## Implementation Timeline
 
 * The most important category
