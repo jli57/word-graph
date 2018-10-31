@@ -13,16 +13,23 @@ code {
     monospace;
 }
 
-.node > circle {
+#search-form input[type="text"] {
+  width: 500px;
+}
+
+
+.node > ellipse {
   fill: #dddddd;
   stroke: #777777;
   stroke-width: 2px;
 }
 
+
 .node > text {
   font-family: sans-serif;
   text-anchor: middle;
   pointer-events: none;
+  font-size: 12px;
 }
 
 .link {

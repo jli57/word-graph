@@ -51,18 +51,21 @@ export const fetchRelated = (word, callback) => (
     nodes.push({  id: word, name: word, group: 1})
     res.related.forEach( (rel, i) => {
       const relWord = getWord(rel["@id"]);
-      let node = {};
-      node.id = relWord;
-      node.name = relWord;
-      node.group = i+2;
-      nodes.push(node);
 
-      let link = {};
-      link.id = i+1;
-      link.source = nodes[0];
-      link.target = node;
-      link.weight = rel.weight;
-      links.push(link);
+      if ( relWord !== word ) {
+        let node = {};
+        node.id = relWord;
+        node.name = relWord;
+        node.group = i+2;
+        nodes.push(node);
+
+        let link = {};
+        link.id = i+1;
+        link.source = nodes[0];
+        link.target = node;
+        link.weight = rel.weight;
+        links.push(link);
+      }
 
     });
 
@@ -72,7 +75,6 @@ export const fetchRelated = (word, callback) => (
 );
 
 const getWord = (id) => {
-  // return id.match(/[^\/w+](.*)/);
-  return id.split("/")[3];
+  return id.split("/")[3].replace("_", " ");
 }
 
