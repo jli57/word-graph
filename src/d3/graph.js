@@ -6,6 +6,8 @@ class Graph {
   constructor(width, height) {
     this.WIDTH = width;
     this.HEIGHT = height;
+    this.nodes = [];
+    this.links = [];
     this.initialize();
   }
 
@@ -18,6 +20,35 @@ class Graph {
 
     this.graphLayer = svg.append('g');
     this.applyZoom(svg);
+
+    this.node = this.graphLayer.selectAll('.node');
+    this.link = this.graphLayer.selectAll('.link');
+
+    this.reset();
+
+    this.node.call( this.simulation.drag);
+
+  }
+
+  reset() {
+    this.links = [];
+    this.nodes = [];
+
+    this.simulation = cola.d3adaptor()
+      .size([this.WIDTH, this.HEIGHT])
+      .linkDistance(100)
+      .avoidOverlaps(true)
+      .nodes(this.nodes)
+      .links(this.links)
+      .on( 'tick', () => {
+        this.node
+          .attr('transform', d => `translate(${d.x},${d.y})` );
+        this.link
+          .attr('x1', d => d.source.x )
+          .attr('y1', d => d.source.y )
+          .attr('x2', d => d.target.x )
+          .attr('y2', d => d.target.y );
+      });
   }
 
   clear() {
@@ -39,55 +70,71 @@ class Graph {
     svg.call(zoom);
   }
 
-  render(data) {
+  setData(data) {
+    // this.nodes = data.nodes;
+    // this.links = data.links;
+    setTimeout( () => {
+      const root = data.nodes.shift();
+      this.nodes.push(root);
+      this.clear();
+      this.render();
+      this.keepNodesOnTop();
+    }, 0);
 
-    console.log(data);
+    const addNodes = setInterval( () => {
+      if ( data.nodes.length > 0 ) {
+        this.nodes.push(data.nodes.shift());
+        this.links.push(data.links.shift());
+        this.clear();
+        this.render();
+        this.keepNodesOnTop();
+      } else {
+        clearInterval(addNodes);
+      }
+    }, 100);
+  }
+
+  render() {
+
     const R = 20;
-    let links = this.graphLayer.selectAll('.link').data(data.links);
 
-    links.enter()
+    this.link = this.graphLayer.selectAll('.link').data(this.links, d => d.id );
+    this.link.exit().remove();
+    this.link
+      .enter()
       .append('line')
       .attr('class', 'link');
-      // .linkDistance( (l) => console.log("test") );
 
-    let nodes = this.graphLayer.selectAll('.node').data(data.nodes, d => d.id );
+    this.node = this.graphLayer.selectAll('.node').data(this.nodes, d => d.id );
+    this.node.exit().remove();
 
-    let enter_nodes = nodes.enter().append('g').attr('class', 'node');
+    this.node.enter()
+      .append('g')
+      .attr('class', 'node');
 
-    enter_nodes.append('ellipse')
+    this.node.append('ellipse')
       .attr('rx', 2.5*R )
       .attr('ry', R )
 
-    enter_nodes.append('text')
+    this.node.append('text')
       .text( d => d.name)
       .attr('dy', '0.35em');
 
-    data.nodes.forEach( n => {
+    this.node.forEach( n => {
       n.width = 4.5 * R;
       n.height = 4.5 * R;
     });
 
+    this.simulation.start();
+  }
 
-    let d3cola  = cola.d3adaptor(d3)
-      .size([this.WIDTH, this.HEIGHT])
-      .linkDistance(100)
-      .symmetricDiffLinkLengths(5)
-      .avoidOverlaps(true)
-      .nodes(data.nodes)
-      .links(data.links)
-      .on( 'tick', () => {
-        nodes
-          .attr('transform', d => `translate(${d.x},${d.y})` );
-        links
-          .attr('x1', d => d.source.x )
-          .attr('y1', d => d.source.y )
-          .attr('x2', d => d.target.x )
-          .attr('y2', d => d.target.y );
-      });
 
-    console.log(d3cola);
-    enter_nodes.call(d3cola.drag);
-    d3cola.start(20, 0, 10);
+  keepNodesOnTop() {
+    const nodes = document.getElementsByClassName("node");
+    for (let node of nodes) {
+      var gnode = node.parentNode;
+      gnode.parentNode.appendChild(gnode);
+    }
   }
 }
 

@@ -11,12 +11,13 @@ import Graph from './d3/graph';
 document.addEventListener('DOMContentLoaded', () => {
 
   const HEIGHT = 800;
-  const WIDTH = 800;
+  const WIDTH = 1000;
   let word = "example";
   const graph = new Graph(WIDTH, HEIGHT);
 
   fetchRelated(word, (data) => {
-    graph.render(data);
+    graph.reset();
+    graph.setData(data);
   });
 
   const searchForm = document.getElementById("search-form");
@@ -27,8 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
     word = searchText.value;
 
     fetchRelated(word, (data) => {
-      graph.clear();
-      graph.render(data);
+      graph.reset();
+      graph.setData(data);
     });
   });
 
