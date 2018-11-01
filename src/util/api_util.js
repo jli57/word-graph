@@ -1,43 +1,5 @@
-const ajax = (options, callback) => {
-  const xhr = new XMLHttpRequest();
-  const DONE = 4;
-  const OK = 200;
-
-  xhr.onreadystatechange = function() {
-    if ( xhr.readyState === DONE ) {
-      if ( xhr.status === OK ) {
-        console.log("success");
-        callback(xhr.response);
-      } else {
-        console.log('request has failed', xhr.status);
-      }
-    }
-  }
-
-  xhr.open(
-    options["method"],
-    options["url"],
-    true
-  );
-
-  xhr.responseType = 'json';
-  xhr.send();
-
-}
-
-export const fetchWord = (word) => (
-  ajax({
-    method: "GET",
-    url: "http://api.conceptnet.io/c/en/example?format=json"
-  }, (res) => {
-    // console.log(res);
-    // const data = JSON.parse(res);
-    const data =  document.getElementById("data");
-    res.edges.forEach( (el, i) => {
-      data.innerHTML += `<li>${el["start"]["label"]}</li>`;
-    });
-  })
-);
+import ajax from './ajax';
+import { parseWord } from './text_util';
 
 export const fetchRelated = (word, callback) => (
   ajax({
@@ -47,10 +9,10 @@ export const fetchRelated = (word, callback) => (
     let nodes = [];
     let links = [];
 
-    const word = getWord(res["@id"]);
+    const word = parseWord(res["@id"]);
     nodes.push({  id: word, name: word, group: 1})
     res.related.forEach( (rel, i) => {
-      const relWord = getWord(rel["@id"]);
+      const relWord = parseWord(rel["@id"]);
 
       if ( relWord !== word ) {
         let node = {};
@@ -74,7 +36,6 @@ export const fetchRelated = (word, callback) => (
   })
 );
 
-const getWord = (id) => {
-  return id.split("/")[3].replace("_", " ");
-}
+
+
 
