@@ -8,24 +8,27 @@ export const fetchRelated = (word, callback) => (
   }, (res) => {
     let nodes = [];
     let links = [];
+    const group = 1;
 
     const word = parseWord(res["@id"]);
-    nodes.push({  id: word, name: word, group: 1})
+    nodes.push({  id: word, name: word, group})
     res.related.forEach( (rel, i) => {
       const relWord = parseWord(rel["@id"]);
 
       if ( relWord !== word ) {
-        let node = {};
-        node.id = relWord;
-        node.name = relWord;
-        node.group = i+2;
+        let node = {
+          id: relWord,
+          name: relWord,
+          group
+        };
         nodes.push(node);
 
-        let link = {};
-        link.id = i+1;
-        link.source = nodes[0];
-        link.target = node;
-        link.weight = rel.weight;
+        let link = {
+          id: i+1,
+          source: nodes[0],
+          target: node,
+          weight: rel.weight
+        };
         links.push(link);
       }
 

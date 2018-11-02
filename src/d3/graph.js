@@ -24,22 +24,10 @@ class Graph {
     this.node = this.graphLayer.selectAll('.node');
     this.link = this.graphLayer.selectAll('.link');
 
-    this.reset();
-
-    this.node.call( this.simulation.drag);
-
-  }
-
-  reset() {
-    this.links = [];
-    this.nodes = [];
-
     this.simulation = cola.d3adaptor()
       .size([this.WIDTH, this.HEIGHT])
       .linkDistance(100)
       .avoidOverlaps(true)
-      .nodes(this.nodes)
-      .links(this.links)
       .on( 'tick', () => {
         this.node
           .attr('transform', d => `translate(${d.x},${d.y})` );
@@ -49,6 +37,20 @@ class Graph {
           .attr('x2', d => d.target.x )
           .attr('y2', d => d.target.y );
       });
+
+    this.reset();
+
+    // this.node.call( this.simulation.drag());
+
+  }
+
+  reset() {
+    this.links = [];
+    this.nodes = [];
+
+    this.simulation = this.simulation
+      .nodes(this.nodes)
+      .links(this.links);
   }
 
   clear() {
@@ -91,7 +93,7 @@ class Graph {
       } else {
         clearInterval(addNodes);
       }
-    }, 100);
+    }, 10);
   }
 
   render() {
@@ -114,16 +116,21 @@ class Graph {
 
     this.node.append('ellipse')
       .attr('rx', 2.5*R )
-      .attr('ry', R )
+      .attr('ry', R );
 
     this.node.append('text')
       .text( d => d.name)
       .attr('dy', '0.35em');
 
+    this.node.on("click", (d) => {
+      this.node.style("stroke","#FFFFFF");
+    });
+
     this.node.forEach( n => {
       n.width = 4.5 * R;
       n.height = 4.5 * R;
     });
+
 
     this.simulation.start();
   }
@@ -136,6 +143,24 @@ class Graph {
       gnode.parentNode.appendChild(gnode);
     }
   }
+
+  dragStarted(d) {
+    if (!d3.event.active) this.simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+  }
+
+  dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+  }
+
+  dragEnded(d) {
+    if (!d3.event.active) this.simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+  }
+
 }
 
 export default Graph;
