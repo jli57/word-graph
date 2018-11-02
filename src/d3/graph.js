@@ -26,30 +26,31 @@ class Graph {
     this.group = this.graphLayer.selectAll('.group');
 
     this.simulation = cola.d3adaptor()
-      .size([this.WIDTH, this.HEIGHT])
       .linkDistance( (l) => l.weight*200 )
-      // .jaccardLinkLengths(40, 0.7)
-      .avoidOverlaps(true)
-      .on( 'tick', () => {
-        this.node
-          .attr('transform', d => `translate(${d.x},${d.y})` )
-          // .attr("x", function (d) { return d.x - d.width / 2; })
-          // .attr("y", function (d) { return d.y - d.height / 2; });
-        this.link
-          .attr('x1', d => d.source.x )
-          .attr('y1', d => d.source.y )
-          .attr('x2', d => d.target.x )
-          .attr('y2', d => d.target.y );
-        // this.group
-        //   // .attr('transform', d => `translate(${d.x},${d.y})` )
-        //   .attr('x', d => d.bounds.x )
-        //   .attr('y', d => d.bounds.y)
-        //   .attr('width', d => d.bounds.width())
-        //   .attr('height', d => d.bounds.height());
-    });
+      .handleDisconnected(false)
+      .size([this.WIDTH, this.HEIGHT])
+      .avoidOverlaps(true);
 
     this.reset();
 
+    this.simulation.on( 'tick', this.tick.bind(this) );
+  }
+
+  tick() {
+    this.node
+      .attr('x', d =>  d.x - d.width / 2 )
+      .attr('y', d => d.y - d.height / 2 )
+      .attr('transform', d => `translate(${d.x},${d.y})` );
+    this.link
+      .attr('x1', d => d.source.x )
+      .attr('y1', d => d.source.y )
+      .attr('x2', d => d.target.x )
+      .attr('y2', d => d.target.y );
+    this.group
+      .attr('x', d => d.bounds.x )
+      .attr('y', d => d.bounds.y)
+      .attr('width', d => d.bounds.width())
+      .attr('height', d => d.bounds.height());
   }
 
   reset() {
@@ -60,6 +61,7 @@ class Graph {
     this.simulation = this.simulation
       .nodes(this.nodes)
       .links(this.links)
+      .groups(this.groups)
       .start();
 
   }
@@ -72,7 +74,6 @@ class Graph {
 
     const zoom = d3.behavior
       .zoom()
-      // .scaleExtent([-10, 10])
       .on('zoom', () => {
         return this.graphLayer.
           attr(
@@ -97,7 +98,7 @@ class Graph {
         node.group = node.id;
         group.leaves.push( node.index );
       } else {
-        const index = this.nodes.length - 1;
+        const index = this.nodes.length;
         root.index = index;
         this.nodes.push(root);
         group.leaves.push(index);
@@ -118,18 +119,16 @@ class Graph {
           index = existingNode.index;
           link.target = existingNode;
         } else {
-          index = this.nodes.length - 1;
+          index = this.nodes.length;
           node.index = index;
           this.nodes.push(node);
         }
         group.leaves.push(index);
         this.links.push(link);
         this.clear();
-        // this.keepNodesOnTop();
         this.render();
       } else {
         clearInterval(addNodes);
-        console.log("test")
       }
     }, 200);
   }
@@ -150,65 +149,74 @@ class Graph {
   }
 
   render() {
-
+    console.log(this.nodes);
+    console.log(this.groups);
     const R = 20;
 
     this.groups.forEach( g => g.padding = 0.01 );
     this.group = this.graphLayer.selectAll('.group').data(this.groups);
-    // this.group.exit().remove();
 
     this.group.enter()
       .append('rect')
       .attr('class', 'group')
       .attr('rx', 5)
-      .attr('ry', 5);
+      .attr('ry', 5)
+      .style('fill', d => "#cccccc" );
 
     this.link = this.graphLayer.selectAll('.link').data(this.links, d => [d.id, d.weight, d.source, d.target] );
-    this.link.exit().remove();
+    // this.link.exit().remove();
     this.link
       .enter()
       .append('line')
       .attr('class', 'link')
       .style('stroke', (d) => (
-        // console.log(d.source.group)
         `hsl(${this.findGroup(d.source.group).colorVal},50%,${d.weight*100}%)`
       ));
 
 
     this.node = this.graphLayer.selectAll('.node').data(this.nodes, d => [d.id, d.name, d.group] );
-    this.node.exit().remove();
+    // this.node.exit().remove();
+
+    this.nodes.forEach( node => { node.width = node.height = 4.5 * R });
 
     this.node.enter()
-      .append('g')
-      .attr('id', d => d.id )
+      .append('rect')
       .attr('class', 'node')
-
-    this.node
-      .append('ellipse')
-      .attr('rx', 2.5*R )
-      .attr('ry', R )
+      .attr('id', d => d.id )
+      .attr("width", d => d.width - 2 )
+      .attr("height", d =>  d.height - 2 )
+      .attr("rx", 5).attr("ry", 5)
       .style('fill', (d) => {return this.findGroup(d.group).color } );
+      // .call(cola.drag);
+    // this.node.enter()
+    //   .append('g')
+    //   .attr('id', d => d.id )
+    //   .attr('class', 'node')
 
-    this.node.append('text')
-      .text( d => d.name)
-      .attr('dy', '0.35em');
+    // this.node
+    //   .append('ellipse')
+    //   .attr('rx', 2.5*R )
+    //   .attr('ry', R )
+    //   .style('fill', (d) => {return this.findGroup(d.group).color } );
 
-    this.nodes.forEach( node => { node.width = node.height = 4.5 * R })
+    // this.node.append('text')
+    //   .text( d => d.name)
+    //   .attr('dy', '0.35em');
 
-    this.node
-      .on("click", this.clicked )
-      .call( this.simulation.drag()
-        .on("dragstart", this.dragStarted)
-        .on("drag", this.dragged)
-        .on("dragend", (d) => {
-          let node = d3.select(`#${d.id}`);
-          node.classed("dragging", false);
-          // node.attr("cx", d3.event.x).attr("cy", d3.event.y);
-          fetchRelated( node.attr('id'), (data) => {
-            this.setData(data);
-          });
-      })
-    );
+    // this.node
+    //   .on("click", this.clicked )
+    //   .call( this.simulation.drag()
+    //     .on("dragstart", this.dragStarted)
+    //     .on("drag", this.dragged)
+    //     .on("dragend", (d) => {
+    //       let node = d3.select(`#${d.id}`);
+    //       node.classed("dragging", false);
+    //       // node.attr("cx", d3.event.x).attr("cy", d3.event.y);
+    //       fetchRelated( node.attr('id'), (data) => {
+    //         this.setData(data);
+    //       });
+    //   })
+    // );
 
     this.simulation.start();
   }
