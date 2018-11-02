@@ -1,5 +1,5 @@
 import ajax from './ajax';
-import { parseWord } from './text_util';
+import { parseId, parseWord } from './text_util';
 
 export const fetchRelated = (word, callback) => (
   ajax({
@@ -8,33 +8,33 @@ export const fetchRelated = (word, callback) => (
   }, (res) => {
     let nodes = [];
     let links = [];
-    const group = 1;
 
-    const word = parseWord(res["@id"]);
-    nodes.push({  id: word, name: word, group})
-    res.related.forEach( (rel, i) => {
-      const relWord = parseWord(rel["@id"]);
+    const rootId = parseId(res["@id"]);
+    const rootWord = parseWord(rootId);
+    const group = rootId;
+    nodes.push({  id: rootId, name: rootWord, group})
+    res.related.forEach( rel => {
+      const id = parseId(rel["@id"]);
+      const name = parseWord(id);
 
-      if ( relWord !== word ) {
+      if ( name !== rootWord ) {
         let node = {
-          id: relWord,
-          name: relWord,
+          id,
+          name,
           group
         };
         nodes.push(node);
 
         let link = {
-          id: i+1,
+          id: `${rootId}-${id}`,
           source: nodes[0],
           target: node,
           weight: rel.weight
         };
         links.push(link);
       }
-
     });
-
-    callback({ nodes, links});
+    callback({ nodes, links });
 
   })
 );

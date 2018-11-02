@@ -1,3 +1,7 @@
-export const parseWord = (id) => {
-  return id.split("/")[3].replace(/_/g, " ");
+export const parseId = (id) => {
+  return id.split("/")[3];
+}
+
+export const parseWord = (word) => {
+  return word.replace(/_/g, " ");
 }
