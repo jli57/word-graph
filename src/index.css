@@ -20,8 +20,6 @@ code {
 
 .node > ellipse {
   fill: #dddddd;
-  stroke: #777777;
-  stroke-width: 2px;
 }
 
 
@@ -34,5 +32,5 @@ code {
 
 .link {
   stroke: #dddddd;
-  stroke-width: 4px;
+  stroke-width: 2px;
 }
