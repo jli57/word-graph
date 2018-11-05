@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
   entry: './src/index.js',
   output: {
-    path: '/',
+    publicPath: "/word-graph/",
     filename: 'bundle.js'
   },
   resolve: {

@@ -20,7 +20,7 @@
   "scripts": {
     "start": "webpack --watch --mode=development",
     "postinstall": "webpack --mode=production",
-    "build": "webpack -p --config webpack.config.js",
+    "build": "webpack --config webpack.config.prod.js",
     "deploy": "gh-pages -d build"
   },
   "keywords": [],
@@ -31,6 +31,7 @@
     "npm": "6.4.1"
   },
   "devDependencies": {
+    "gh-pages": "^2.0.1",
     "node-sass": "^4.10.0",
     "sass-loader": "^7.1.0"
   }
