@@ -1,17 +1,9 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import './styles/index.css';
 import { fetchRelated } from './util/api_util';
 import * as d3 from 'd3';
 import * as cola from 'webcola';
-// window.d3 = d3;
-
 
 document.addEventListener('DOMContentLoaded', () => {
-
-
   const word = "example";
   const width = 600;
   const height = 400;
@@ -67,11 +59,5 @@ document.addEventListener('DOMContentLoaded', () => {
       d3cola.start();
 
   });
-
-  // const root = document.getElementById('root');
-  // ReactDOM.render(<App />, root);
-  // serviceWorker.unregister();
-
-
 });
 
