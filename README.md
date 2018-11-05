@@ -1,10 +1,11 @@
 # Word Graph
 
-* [Live Site](#)
+* [Live Site](https://word-graph.herokuapp.com/)
 * [Background and Overview](#background-and-overview)
 * [Functionality and MVP Features](#functionality-and-mvp-features)
 * [Architecture and Technologies](#architecture-and-technologies)
 * [Implementation Timeline](#implementation-timeline)
+
 ## Background and Overview
 
 Word graph is a word association/analysis visualization tool.
