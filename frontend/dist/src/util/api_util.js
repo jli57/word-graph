@@ -1,10 +1,11 @@
 import ajax from './ajax';
 import { parseId, parseWord } from './text_util';
 
-export const fetchRelated = ({word, limit, offset}, callback) => (
+export const fetchRelated = (options, callback) => (
   ajax({
-    method: "GET",
-    url: `http://api.conceptnet.io/related/c/en/${word}?filter=/c/en&limit=${limit+offset}`
+    method: "POST",
+    url: `/api/conceptnet`,
+    options
   }, (res) => {
     let nodes = [];
     let links = [];
@@ -15,7 +16,7 @@ export const fetchRelated = ({word, limit, offset}, callback) => (
     const group = rootId;
     nodes.push({  wordId: rootId, word: rootWord, group});
 
-    res.related.filter( (rel, i) => i >= offset )
+    res.related.filter( (rel, i) => i >= options.offset )
     .forEach( rel => {
 
       const wordId = parseId(rel["@id"]);

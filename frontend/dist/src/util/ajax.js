@@ -14,14 +14,20 @@ const ajax = (options, callback) => {
     }
   }
 
+
   xhr.open(
     options["method"],
     options["url"],
     true
-  );
+    );
+
+  xhr.setRequestHeader("Content-Type", "application/json");
+
+  const body = JSON.stringify(options.options);
 
   xhr.responseType = 'json';
-  xhr.send();
+
+  xhr.send(body);
 
 }
 

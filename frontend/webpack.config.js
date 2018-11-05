@@ -4,6 +4,7 @@ module.exports = {
   context: __dirname,
   entry: './dist/src/index.js',
   output: {
+    publicPath: "/word-graph/",
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js'
   },
