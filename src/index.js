@@ -6,20 +6,15 @@ import Graph from './d3/graph';
 document.addEventListener('DOMContentLoaded', () => {
 
   const canvas  = document.getElementById("canvas");
-  let word = "example";
   const graph = new Graph(canvas);
 
-
-
-
+  let word = "example";
   fetchRelated(word, (data) => {
     graph.reset();
     graph.setData(data);
   });
 
-
   const searchForm = document.getElementById("search-form");
-
   searchForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const searchText = document.getElementById("search-text");
@@ -30,11 +25,5 @@ document.addEventListener('DOMContentLoaded', () => {
       graph.setData(data);
     });
   });
-
-
-
-  var chartDiv = document.getElementById("chart");
-  var svg = d3.select(chartDiv).append("svg");
-
 
 });
