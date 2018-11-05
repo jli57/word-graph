@@ -1,3 +1,5 @@
+import './styles/reset.css';
+import './styles/index.css';
 import { fetchRelated } from './util/api_util';
 import Graph from './d3/graph';
 

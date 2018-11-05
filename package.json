@@ -22,7 +22,7 @@
     "postinstall": "webpack --mode=production",
     "build": "webpack --mode=production --config webpack.config.prod.js",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist"
   },
   "keywords": [],
   "author": "",
