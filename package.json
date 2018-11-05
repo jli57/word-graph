@@ -1,39 +1,33 @@
 {
   "name": "word-graph",
-  "version": "0.1.0",
-  "private": true,
-  "homage": "https://jli57.github.io/word-graph/",
-  "dependencies": {
-    "@babel/core": "^7.1.2",
-    "@babel/preset-env": "^7.1.0",
-    "@babel/preset-react": "^7.0.0",
-    "babel-loader": "^8.0.4",
-    "css-loader": "^1.0.1",
-    "d3": "^3.5.17",
-    "react": "^16.6.0",
-    "react-dom": "^16.6.0",
-    "style-loader": "^0.23.1",
-    "webcola": "^3.3.8",
-    "webpack": "^4.24.0",
-    "webpack-cli": "^3.1.2"
-  },
+  "version": "1.0.0",
+  "description": "* [Live Site](#) * [Background and Overview](#background-and-overview) * [Functionality and MVP Features](#functionality-and-mvp-features) * [Architecture and Technologies](#architecture-and-technologies) * [Implementation Timeline](#implementation-timeline) ## Background and Overview",
+  "main": "index.js",
   "scripts": {
-    "start": "webpack --watch --mode=development",
-    "postinstall": "webpack --mode=production",
-    "build": "webpack --mode=production --config webpack.config.prod.js",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "start": "node app.js",
+    "server": "nodemon app.js",
+    "server-inspect": "nodemon --inspect app.js",
+    "frontend-install": "npm install --prefix frontend",
+    "frontend": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run frontend\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jli57/word-graph.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "engines": {
-    "node": "8.9.0",
-    "npm": "6.4.1"
+  "bugs": {
+    "url": "https://github.com/jli57/word-graph/issues"
+  },
+  "homepage": "https://github.com/jli57/word-graph#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "request": "^2.88.0"
   },
   "devDependencies": {
-    "gh-pages": "^2.0.1",
-    "node-sass": "^4.10.0",
-    "sass-loader": "^7.1.0"
+    "nodemon": "^1.18.5"
   }
 }

@@ -1,0 +1,39 @@
+{
+  "name": "word-graph",
+  "version": "0.1.0",
+  "private": true,
+  "homage": "https://jli57.github.io/word-graph/",
+  "dependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.4",
+    "css-loader": "^1.0.1",
+    "d3": "^3.5.17",
+    "react": "^16.6.0",
+    "react-dom": "^16.6.0",
+    "style-loader": "^0.23.1",
+    "webcola": "^3.3.8",
+    "webpack": "^4.24.0",
+    "webpack-cli": "^3.1.2"
+  },
+  "scripts": {
+    "start": "webpack --watch --mode=development",
+    "postinstall": "webpack --mode=production",
+    "build": "webpack --mode=production --config webpack.config.prod.js",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": "8.9.0",
+    "npm": "6.4.1"
+  },
+  "devDependencies": {
+    "gh-pages": "^2.0.1",
+    "node-sass": "^4.10.0",
+    "sass-loader": "^7.1.0"
+  }
+}
