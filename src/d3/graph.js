@@ -1,6 +1,5 @@
 import * as d3 from 'd3';
 import * as cola from 'webcola';
-import * as d3Chromatic from 'd3-scale-chromatic';
 import { fetchRelated } from '../util/api_util';
 
 class Graph {

@@ -98,7 +98,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "body {\n  margin: 0;\n  padding: 0;\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Oxygen\",\n    \"Ubuntu\", \"Cantarell\", \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\",\n    sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}\n\ncode {\n  font-family: source-code-pro, Menlo, Monaco, Consolas, \"Courier New\",\n    monospace;\n}\n\n.node > circle {\n  fill: #dddddd;\n  stroke: #777777;\n  stroke-width: 2px;\n}\n\n.node > text {\n  font-family: sans-serif;\n  text-anchor: middle;\n  pointer-events: none;\n}\n\n.link {\n  stroke: #dddddd;\n  stroke-width: 4px;\n}", ""]);
+exports.push([module.i, "body {\n  margin: 0;\n  padding: 0;\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Oxygen\",\n    \"Ubuntu\", \"Cantarell\", \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\",\n    sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}\n\ncode {\n  font-family: source-code-pro, Menlo, Monaco, Consolas, \"Courier New\",\n    monospace;\n}\n\n#search-form input[type=\"text\"] {\n  width: 500px;\n}\n\n\n.node > ellipse {\n  fill: #dddddd;\n}\n\n\n.node > text {\n  font-family: sans-serif;\n  text-anchor: middle;\n  pointer-events: none;\n  font-size: 12px;\n}\n\n.link {\n  stroke: #dddddd;\n  stroke-width: 2px;\n}", ""]);
 
 // exports
 
@@ -14928,6 +14928,301 @@ exports.removeOverlapInOneDimension = removeOverlapInOneDimension;
 
 /***/ }),
 
+/***/ "./src/d3/graph.js":
+/*!*************************!*\
+  !*** ./src/d3/graph.js ***!
+  \*************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/d3.js");
+/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(d3__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var webcola__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! webcola */ "./node_modules/webcola/dist/index.js");
+/* harmony import */ var webcola__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(webcola__WEBPACK_IMPORTED_MODULE_1__);
+!(function webpackMissingModule() { var e = new Error("Cannot find module 'd3-scale-chromatic'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+/* harmony import */ var _util_api_util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../util/api_util */ "./src/util/api_util.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+
+
+
+var Graph =
+/*#__PURE__*/
+function () {
+  function Graph(width, height) {
+    _classCallCheck(this, Graph);
+
+    this.WIDTH = width;
+    this.HEIGHT = height;
+    this.initialize();
+  }
+
+  _createClass(Graph, [{
+    key: "initialize",
+    value: function initialize() {
+      var svg = d3__WEBPACK_IMPORTED_MODULE_0__["select"]("#canvas").append("svg").attr("width", this.WIDTH).attr("height", this.HEIGHT).style("border", "1px solid black");
+      this.graphLayer = svg.append('g');
+      this.applyZoom(svg);
+      this.node = this.graphLayer.selectAll('.node');
+      this.link = this.graphLayer.selectAll('.link'); // this.group = this.graphLayer.selectAll('.group');
+
+      this.simulation = webcola__WEBPACK_IMPORTED_MODULE_1__["d3adaptor"]().linkDistance(function (l) {
+        return l.weight * 200;
+      }).handleDisconnected(false).size([this.WIDTH, this.HEIGHT]).avoidOverlaps(true);
+      this.reset();
+      this.simulation.on('tick', this.tick.bind(this));
+    }
+  }, {
+    key: "tick",
+    value: function tick() {
+      this.node.attr('x', function (d) {
+        return d.x - d.width / 2;
+      }).attr('y', function (d) {
+        return d.y - d.height / 2;
+      }).attr('transform', function (d) {
+        return "translate(".concat(d.x, ",").concat(d.y, ")");
+      });
+      this.link.attr('x1', function (d) {
+        return d.source.x;
+      }).attr('y1', function (d) {
+        return d.source.y;
+      }).attr('x2', function (d) {
+        return d.target.x;
+      }).attr('y2', function (d) {
+        return d.target.y;
+      }); // this.group
+      //   .attr('x', d => d.bounds.x )
+      //   .attr('y', d => d.bounds.y)
+      //   .attr('width', d => d.bounds.width())
+      //   .attr('height', d => d.bounds.height());
+    }
+  }, {
+    key: "reset",
+    value: function reset() {
+      this.links = [];
+      this.nodes = [];
+      this.groups = [];
+      this.simulation = this.simulation.nodes(this.nodes).links(this.links) // .groups(this.groups)
+      .start();
+    }
+  }, {
+    key: "clear",
+    value: function clear() {
+      this.graphLayer.selectAll("*").remove();
+    }
+  }, {
+    key: "applyZoom",
+    value: function applyZoom(svg) {
+      var _this = this;
+
+      var zoom = d3__WEBPACK_IMPORTED_MODULE_0__["behavior"].zoom().on('zoom', function () {
+        return _this.graphLayer.attr('transform', "translate(".concat(zoom.translate(), ")scale(").concat(zoom.scale(), ")"));
+      });
+      svg.call(zoom);
+    }
+  }, {
+    key: "setData",
+    value: function setData(data) {
+      var _this2 = this;
+
+      var colorVal = this.groups.length * 100 % 360;
+      var group = {
+        leaves: [],
+        color: "hsl(".concat(colorVal, ",70%,70%)"),
+        colorVal: colorVal
+      };
+      this.groups.push(group);
+      setTimeout(function () {
+        var root = data.nodes.shift();
+
+        var node = _this2.findNode(root.id);
+
+        group.id = root.id;
+
+        if (node) {
+          data.links.forEach(function (link) {
+            return link.source = node;
+          });
+          node.group = node.id;
+          group.leaves.push(node.index);
+        } else {
+          var index = _this2.nodes.length;
+          root.index = index;
+
+          _this2.nodes.push(root);
+
+          group.leaves.push(index);
+        }
+
+        _this2.clear();
+
+        _this2.render(); // this.keepNodesOnTop();
+
+      }, 0);
+      var addNodes = setInterval(function () {
+        if (data.nodes.length > 0) {
+          var index;
+          var node = data.nodes.shift();
+          var link = data.links.shift();
+
+          var existingNode = _this2.findNode(node.id);
+
+          if (existingNode) {
+            index = existingNode.index;
+            link.target = existingNode;
+          } else {
+            index = _this2.nodes.length;
+            node.index = index;
+
+            _this2.nodes.push(node);
+          }
+
+          group.leaves.push(index);
+
+          _this2.links.push(link);
+
+          _this2.clear();
+
+          _this2.render();
+        } else {
+          clearInterval(addNodes);
+        }
+      }, 200);
+    }
+  }, {
+    key: "findNode",
+    value: function findNode(id) {
+      var node = this.nodes.filter(function (node) {
+        return node.id === id;
+      });
+
+      if (node.length > 0) {
+        return node[0];
+      }
+    }
+  }, {
+    key: "findGroup",
+    value: function findGroup(id) {
+      var group = this.groups.filter(function (group) {
+        return group.id === id;
+      });
+
+      if (group.length > 0) {
+        return group[0];
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this3 = this;
+
+      // console.log(this.nodes);
+      // console.log(this.groups);
+      var R = 20; // this.groups.forEach( g => g.padding = 0.01 );
+      // this.group = this.graphLayer.selectAll('.group').data(this.groups);
+      // this.group.enter()
+      //   .append('rect')
+      //   .attr('class', 'group')
+      //   .attr('rx', 5)
+      //   .attr('ry', 5)
+      //   .style('fill', d => "#cccccc" );
+
+      this.link = this.graphLayer.selectAll('.link').data(this.links, function (d) {
+        return [d.id, d.weight, d.source, d.target];
+      });
+      this.link.exit().remove();
+      this.link.enter().append('line').attr('class', 'link').style('stroke', function (d) {
+        return "hsl(".concat(_this3.findGroup(d.source.group).colorVal, ",50%,").concat(d.weight * 100, "%)");
+      });
+      this.node = this.graphLayer.selectAll('.node').data(this.nodes, function (d) {
+        return [d.id, d.name, d.group];
+      });
+      this.node.exit().remove();
+      this.nodes.forEach(function (node) {
+        node.width = node.height = 4.5 * R;
+      });
+      this.node.enter().append('g').attr('id', function (d) {
+        return d.id;
+      }).attr('class', 'node');
+      this.node.append('ellipse').attr('rx', 2.5 * R).attr('ry', R).style('fill', function (d) {
+        return _this3.findGroup(d.group).color;
+      });
+      this.node.append('text').text(function (d) {
+        return d.name;
+      }).attr('dy', '0.35em');
+      this.node.on("click", this.clicked).call(this.simulation.drag().on("dragstart", this.dragStarted).on("drag", this.dragged).on("dragend", function (d) {
+        var node = d3__WEBPACK_IMPORTED_MODULE_0__["select"]("#".concat(d.id));
+        node.classed("dragging", false); // node.attr("cx", d3.event.x).attr("cy", d3.event.y);
+
+        Object(_util_api_util__WEBPACK_IMPORTED_MODULE_3__["fetchRelated"])(node.attr('id'), function (data) {
+          _this3.setData(data);
+        });
+      }));
+      this.simulation.start();
+    }
+  }, {
+    key: "keepNodesOnTop",
+    value: function keepNodesOnTop() {
+      var nodes = document.getElementsByClassName("node");
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = nodes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var node = _step.value;
+          var gnode = node.parentNode;
+          gnode.parentNode.appendChild(gnode);
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return != null) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+    }
+  }, {
+    key: "dragStarted",
+    value: function dragStarted(d) {
+      d3__WEBPACK_IMPORTED_MODULE_0__["event"].sourceEvent.stopPropagation();
+      d3__WEBPACK_IMPORTED_MODULE_0__["select"](this).classed("dragging", true);
+    }
+  }, {
+    key: "dragged",
+    value: function dragged(d) {
+      d3__WEBPACK_IMPORTED_MODULE_0__["select"](this).attr("cx", d3__WEBPACK_IMPORTED_MODULE_0__["event"].x).attr("cy", d3__WEBPACK_IMPORTED_MODULE_0__["event"].y);
+    }
+  }, {
+    key: "clicked",
+    value: function clicked() {
+      console.log("click", d3__WEBPACK_IMPORTED_MODULE_0__["event"]);
+      if (d3__WEBPACK_IMPORTED_MODULE_0__["event"].defaultPevented) return;
+    }
+  }]);
+
+  return Graph;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (Graph);
+
+/***/ }),
+
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
@@ -14940,56 +15235,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _styles_index_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./styles/index.css */ "./src/styles/index.css");
 /* harmony import */ var _styles_index_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_styles_index_css__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _util_api_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util/api_util */ "./src/util/api_util.js");
-/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! d3 */ "./node_modules/d3/d3.js");
-/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(d3__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var webcola__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! webcola */ "./node_modules/webcola/dist/index.js");
-/* harmony import */ var webcola__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(webcola__WEBPACK_IMPORTED_MODULE_3__);
-
+/* harmony import */ var _d3_graph__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./d3/graph */ "./src/d3/graph.js");
 
 
 
 document.addEventListener('DOMContentLoaded', function () {
+  var HEIGHT = 800;
+  var WIDTH = 1000;
   var word = "example";
-  var width = 600;
-  var height = 400;
-  var R = 15;
-  var svg = d3__WEBPACK_IMPORTED_MODULE_2__["select"]("#canvas").append("svg").attr("width", width).attr("height", height).style("border", "1px solid black");
-  Object(_util_api_util__WEBPACK_IMPORTED_MODULE_1__["fetchRelated"])(word, function (graph) {
-    console.log(graph);
-    var links = svg.selectAll('.link').data(graph.links, function (d) {
-      return d.id;
+  var graph = new _d3_graph__WEBPACK_IMPORTED_MODULE_2__["default"](WIDTH, HEIGHT);
+  Object(_util_api_util__WEBPACK_IMPORTED_MODULE_1__["fetchRelated"])(word, function (data) {
+    graph.reset();
+    graph.setData(data);
+  });
+  var searchForm = document.getElementById("search-form");
+  searchForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var searchText = document.getElementById("search-text");
+    word = searchText.value;
+    Object(_util_api_util__WEBPACK_IMPORTED_MODULE_1__["fetchRelated"])(word, function (data) {
+      graph.reset();
+      graph.setData(data);
     });
-    links.enter().append('line').attr('class', 'link');
-    var nodes = svg.selectAll('.node').data(graph.nodes, function (d) {
-      return d.id;
-    });
-    var enter_nodes = nodes.enter().append('g').attr('class', 'node');
-    enter_nodes.append('circle').attr('r', R);
-    enter_nodes.append('text').text(function (d) {
-      return d.name;
-    }).attr('dy', '0.35em');
-    graph.nodes.forEach(function (v) {
-      v.width = 2.5 * R;
-      return v.height = 2.5 * R;
-    });
-    var d3cola = webcola__WEBPACK_IMPORTED_MODULE_3__["d3adaptor"](d3__WEBPACK_IMPORTED_MODULE_2__).size([width, height]).linkDistance(50).symmetricDiffLinkLengths(5).avoidOverlaps(true).nodes(graph.nodes).links(graph.links).on('tick', function () {
-      nodes.attr('transform', function (d) {
-        return "translate(".concat(d.x, ",").concat(d.y, ")");
-      });
-      return links.attr('x1', function (d) {
-        return d.source.x;
-      }).attr('y1', function (d) {
-        return d.source.y;
-      }).attr('x2', function (d) {
-        return d.target.x;
-      }).attr('y2', function (d) {
-        return d.target.y;
-      });
-    });
-    console.log(enter_nodes);
-    console.log(d3cola);
-    enter_nodes.call(d3cola.drag);
-    d3cola.start();
   });
 });
 
@@ -15025,17 +15292,15 @@ if(false) {}
 
 /***/ }),
 
-/***/ "./src/util/api_util.js":
-/*!******************************!*\
-  !*** ./src/util/api_util.js ***!
-  \******************************/
-/*! exports provided: fetchWord, fetchRelated */
+/***/ "./src/util/ajax.js":
+/*!**************************!*\
+  !*** ./src/util/ajax.js ***!
+  \**************************/
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchWord", function() { return fetchWord; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchRelated", function() { return fetchRelated; });
 var ajax = function ajax(options, callback) {
   var xhr = new XMLHttpRequest();
   var DONE = 4;
@@ -15057,45 +15322,58 @@ var ajax = function ajax(options, callback) {
   xhr.send();
 };
 
-var fetchWord = function fetchWord(word) {
-  return ajax({
-    method: "GET",
-    url: "http://api.conceptnet.io/c/en/example?format=json"
-  }, function (res) {
-    // console.log(res);
-    // const data = JSON.parse(res);
-    var data = document.getElementById("data");
-    res.edges.forEach(function (el, i) {
-      data.innerHTML += "<li>".concat(el["start"]["label"], "</li>");
-    });
-  });
-};
+/* harmony default export */ __webpack_exports__["default"] = (ajax);
+
+/***/ }),
+
+/***/ "./src/util/api_util.js":
+/*!******************************!*\
+  !*** ./src/util/api_util.js ***!
+  \******************************/
+/*! exports provided: fetchRelated */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchRelated", function() { return fetchRelated; });
+/* harmony import */ var _ajax__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ajax */ "./src/util/ajax.js");
+/* harmony import */ var _text_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./text_util */ "./src/util/text_util.js");
+
+
 var fetchRelated = function fetchRelated(word, callback) {
-  return ajax({
+  return Object(_ajax__WEBPACK_IMPORTED_MODULE_0__["default"])({
     method: "GET",
     url: "http://api.conceptnet.io/related/c/en/".concat(word, "?filter=/c/en&limit=20")
   }, function (res) {
     var nodes = [];
     var links = [];
-    var word = getWord(res["@id"]);
+    var rootId = Object(_text_util__WEBPACK_IMPORTED_MODULE_1__["parseId"])(res["@id"]);
+    var rootWord = Object(_text_util__WEBPACK_IMPORTED_MODULE_1__["parseWord"])(rootId);
+    var group = rootId;
     nodes.push({
-      id: word,
-      name: word,
-      group: 1
+      id: rootId,
+      name: rootWord,
+      group: group
     });
-    res.related.forEach(function (rel, i) {
-      var relWord = getWord(rel["@id"]);
-      var node = {};
-      node.id = relWord;
-      node.name = relWord;
-      node.group = i + 2;
-      nodes.push(node);
-      var link = {};
-      link.id = i + 1;
-      link.source = nodes[0];
-      link.target = node;
-      link.weight = rel.weight;
-      links.push(link);
+    res.related.forEach(function (rel) {
+      var id = Object(_text_util__WEBPACK_IMPORTED_MODULE_1__["parseId"])(rel["@id"]);
+      var name = Object(_text_util__WEBPACK_IMPORTED_MODULE_1__["parseWord"])(id);
+
+      if (name !== rootWord) {
+        var node = {
+          id: id,
+          name: name,
+          group: group
+        };
+        nodes.push(node);
+        var link = {
+          id: "".concat(rootId, "-").concat(id),
+          source: nodes[0],
+          target: node,
+          weight: rel.weight
+        };
+        links.push(link);
+      }
     });
     callback({
       nodes: nodes,
@@ -15104,9 +15382,24 @@ var fetchRelated = function fetchRelated(word, callback) {
   });
 };
 
-var getWord = function getWord(id) {
-  // return id.match(/[^\/w+](.*)/);
+/***/ }),
+
+/***/ "./src/util/text_util.js":
+/*!*******************************!*\
+  !*** ./src/util/text_util.js ***!
+  \*******************************/
+/*! exports provided: parseId, parseWord */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parseId", function() { return parseId; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parseWord", function() { return parseWord; });
+var parseId = function parseId(id) {
   return id.split("/")[3];
+};
+var parseWord = function parseWord(word) {
+  return word.replace(/_/g, " ");
 };
 
 /***/ })
