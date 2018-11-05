@@ -10,7 +10,7 @@ class Graph {
     this.links = [];
     this.groups = [];
     this.initialize();
-    this.LIMIT = 10;
+    this.LIMIT = limit;
   }
 
   initialize() {

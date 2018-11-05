@@ -6,7 +6,7 @@ import Graph from './d3/graph';
 document.addEventListener('DOMContentLoaded', () => {
 
   const canvas  = document.getElementById("canvas");
-  const limit = 20;
+  const limit = 15;
   const offset = 0;
   const graph = new Graph(canvas, limit);
 
