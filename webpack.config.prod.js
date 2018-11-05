@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   context: __dirname,
-  entry: './src/index.js',
+  entry: './dist/src/index.js',
   output: {
     publicPath: "/word-graph/",
     path: path.resolve(__dirname, 'dist'),
