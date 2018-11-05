@@ -1,32 +1,35 @@
 import ajax from './ajax';
 import { parseId, parseWord } from './text_util';
 
-export const fetchRelated = (word, callback) => (
+export const fetchRelated = ({word, limit, offset}, callback) => (
   ajax({
     method: "GET",
-    url: `http://api.conceptnet.io/related/c/en/${word}?filter=/c/en&limit=20`
+    url: `http://api.conceptnet.io/related/c/en/${word}?filter=/c/en&limit=${limit+offset}`
   }, (res) => {
     let nodes = [];
     let links = [];
 
-    const rootId = parseId(res["@id"]);
-    const rootWord = parseWord(rootId);
-    const group = rootId;
-    nodes.push({  id: rootId, name: rootWord, group})
-    res.related.forEach( rel => {
-      const id = parseId(rel["@id"]);
-      const name = parseWord(id);
+    let rootId = parseId(res["@id"]);
+    let rootWord = parseWord(rootId);
 
-      if ( name !== rootWord ) {
+    const group = rootId;
+    nodes.push({  wordId: rootId, word: rootWord, group});
+
+    res.related.filter( (rel, i) => i >= offset )
+    .forEach( rel => {
+
+      const wordId = parseId(rel["@id"]);
+      const word = parseWord(wordId);
+
+      if ( rootWord !== word ) {
         let node = {
-          id,
-          name,
+          wordId,
+          word,
           group
         };
         nodes.push(node);
 
         let link = {
-          id: `${rootId}-${id}`,
           source: nodes[0],
           target: node,
           weight: rel.weight

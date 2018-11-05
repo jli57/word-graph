@@ -6,10 +6,17 @@ import Graph from './d3/graph';
 document.addEventListener('DOMContentLoaded', () => {
 
   const canvas  = document.getElementById("canvas");
-  const graph = new Graph(canvas);
+  const limit = 20;
+  const offset = 0;
+  const graph = new Graph(canvas, limit);
 
-  let word = "example";
-  fetchRelated(word, (data) => {
+  let options = {
+    word: "example",
+    limit,
+    offset
+  };
+
+  fetchRelated(options, (data) => {
     graph.reset();
     graph.setData(data);
   });
@@ -18,9 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
   searchForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const searchText = document.getElementById("search-text");
-    word = searchText.value;
+    options.word = searchText.value;
 
-    fetchRelated(word, (data) => {
+    fetchRelated(options, (data) => {
       graph.reset();
       graph.setData(data);
     });

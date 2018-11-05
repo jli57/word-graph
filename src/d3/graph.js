@@ -4,9 +4,13 @@ import { fetchRelated } from '../util/api_util';
 
 class Graph {
 
-  constructor(canvas) {
+  constructor(canvas, limit) {
     this.canvas = canvas;
+    this.nodes = [];
+    this.links = [];
+    this.groups = [];
     this.initialize();
+    this.LIMIT = 10;
   }
 
   initialize() {
@@ -15,19 +19,18 @@ class Graph {
       .append("svg")
       .attr("width", this.WIDTH)
       .attr("height", this.HEIGHT)
-      .style("background", "#343d46")
-      .style("border", "1px solid black");
+      .attr("class", "graph");
 
     this.svg = svg;
     this.graphLayer = svg.append('g');
+
     this.applyZoom(svg);
 
     this.node = this.graphLayer.selectAll('.node');
     this.link = this.graphLayer.selectAll('.link');
 
-
     this.simulation = cola.d3adaptor()
-      .linkDistance( (l) => l.weight*200 )
+      .linkDistance( (l) => 100/(2*l.weight) )
       .handleDisconnected(false)
       .avoidOverlaps(true);
 
@@ -38,9 +41,8 @@ class Graph {
         .attr("width", width)
         .attr("height", height);
 
-      this.simulation
-        .size([width, height])
-        .start();
+      this.simulation.size([width, height]).start();
+
     }
     redraw();
 
@@ -66,13 +68,11 @@ class Graph {
   reset() {
     this.links = [];
     this.nodes = [];
-    this.groups = [];
 
     this.simulation = this.simulation
       .nodes(this.nodes)
       .links(this.links)
       .start();
-
   }
 
   clear() {
@@ -80,7 +80,6 @@ class Graph {
   }
 
   applyZoom(svg) {
-
     const zoom = d3.behavior
       .zoom()
       .on('zoom', () => {
@@ -94,22 +93,24 @@ class Graph {
   }
 
   setData(data) {
+
     const colorVal = (this.groups.length * 100 ) % 360;
     let group = { leaves: [], color: `hsl(${colorVal},70%,70%)`, colorVal };
     this.groups.push(group);
 
     setTimeout( () => {
       let root = data.nodes.shift();
-      let node = this.findNode(root.id);
-      group.id = root.id;
+      let node = this.findNode(root.wordId);
+      group.id = root.wordId;
+
       if ( node ) {
         data.links.forEach( link => link.source = node );
-        node.group = node.id;
+        node.group = node.wordId;
         group.leaves.push( node.index );
       } else {
         const index = this.nodes.length;
         root.index = index;
-        this.nodes.push(root);
+        this.addNode(root);
         group.leaves.push(index);
       }
       this.clear();
@@ -122,17 +123,18 @@ class Graph {
         const node  = data.nodes.shift();
         const link = data.links.shift();
 
-        const existingNode = this.findNode(node.id);
+        const existingNode = this.findNode(node.wordId);
         if ( existingNode ) {
           index = existingNode.index;
           link.target = existingNode;
         } else {
           index = this.nodes.length;
           node.index = index;
-          this.nodes.push(node);
+          this.addNode(node);
         }
+
         group.leaves.push(index);
-        this.links.push(link);
+        this.addLink(link);
         this.clear();
         this.render();
       } else {
@@ -141,25 +143,28 @@ class Graph {
     }, 200);
   }
 
-  findNode(id) {
+  findNode(wordId) {
     const node = this.nodes
-      .filter( node => node.id === id );
+      .filter( node => node.wordId === wordId );
     if ( node.length > 0 ) {
       return node[0];
     }
   }
 
-  findGroup(id) {
-    const group = this.groups.filter( group => group.id === id );
+  findGroup(wordId) {
+    const group = this.groups.filter( group => group.id === wordId );
     if ( group.length > 0 ) {
       return group[0];
     }
   }
 
   render() {
+
     const R = 20;
 
-    this.link = this.graphLayer.selectAll('.link').data(this.links, d => [d.id, d.weight, d.source, d.target] );
+    this.link = this.graphLayer
+      .selectAll('.link')
+      .data(this.links, d => [d.id, d.weight, d.source, d.target] );
     this.link.exit().remove();
 
     this.link
@@ -170,16 +175,15 @@ class Graph {
         `hsl(${this.findGroup(d.source.group).colorVal},50%,${d.weight*100}%)`
       ));
 
-
-    this.node = this.graphLayer.selectAll('.node').data(this.nodes, d => [d.id, d.name, d.group] );
+    this.node = this.graphLayer
+      .selectAll('.node').data(this.nodes, d => [d.id, d.wordId, d.name, d.group] );
     this.node.exit().remove();
-
-    this.nodes.forEach( node => { node.width = node.height = 4.5 * R });
 
     this.node.enter()
       .append('g')
-      .attr('id', d => d.id )
+      .attr('id', d => `word${d.id}` )
       .attr('class', 'node')
+      .attr('wordId', d => d.wordId );
 
     this.node
       .append('ellipse')
@@ -188,7 +192,7 @@ class Graph {
       .style('fill', (d) => {return this.findGroup(d.group).color } );
 
     this.node.append('text')
-      .text( d => d.name)
+      .text( d => d.word )
       .attr('dy', '0.35em');
 
     this.node
@@ -197,9 +201,19 @@ class Graph {
         .on("dragstart", this.dragStarted)
         .on("drag", this.dragged)
         .on("dragend", (d) => {
-          let node = d3.select(`#${d.id}`);
+          let node = d3.select(`#word${d.id}`);
           node.classed("dragging", false);
-          fetchRelated( node.attr('id'), (data) => {
+          const word = node.attr('wordId');
+          const group = this.findGroup(word);
+          const offset = group ? group.leaves.length+1 : 0;
+
+          let options = {
+            word,
+            offset,
+            limit: this.LIMIT
+          };
+
+          fetchRelated( options, (data) => {
             this.setData(data);
           });
       })
@@ -208,12 +222,15 @@ class Graph {
     this.simulation.start();
   }
 
-  keepNodesOnTop() {
-    const nodes = document.getElementsByClassName("node");
-    for (let node of nodes) {
-      var gnode = node.parentNode;
-      gnode.parentNode.appendChild(gnode);
-    }
+  addNode(node) {
+    node.id = this.nodes.length + 1;
+    this.nodes.push(node);
+  }
+
+  addLink(link) {
+    link.id = this.links.length + 1;
+    console.log(link);
+    this.links.push(link);
   }
 
   dragStarted(d) {

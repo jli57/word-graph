@@ -68,6 +68,12 @@ form input[type="text"] {
   bottom: 50px;
 }
 
+.graph {
+  background: #343d46;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
 .node > text {
   font-family: sans-serif;
   text-anchor: middle;
