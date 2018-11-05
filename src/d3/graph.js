@@ -23,7 +23,7 @@ class Graph {
 
     this.node = this.graphLayer.selectAll('.node');
     this.link = this.graphLayer.selectAll('.link');
-    this.group = this.graphLayer.selectAll('.group');
+    // this.group = this.graphLayer.selectAll('.group');
 
     this.simulation = cola.d3adaptor()
       .linkDistance( (l) => l.weight*200 )
@@ -46,11 +46,11 @@ class Graph {
       .attr('y1', d => d.source.y )
       .attr('x2', d => d.target.x )
       .attr('y2', d => d.target.y );
-    this.group
-      .attr('x', d => d.bounds.x )
-      .attr('y', d => d.bounds.y)
-      .attr('width', d => d.bounds.width())
-      .attr('height', d => d.bounds.height());
+    // this.group
+    //   .attr('x', d => d.bounds.x )
+    //   .attr('y', d => d.bounds.y)
+    //   .attr('width', d => d.bounds.width())
+    //   .attr('height', d => d.bounds.height());
   }
 
   reset() {
@@ -61,7 +61,7 @@ class Graph {
     this.simulation = this.simulation
       .nodes(this.nodes)
       .links(this.links)
-      .groups(this.groups)
+      // .groups(this.groups)
       .start();
 
   }
@@ -149,22 +149,23 @@ class Graph {
   }
 
   render() {
-    console.log(this.nodes);
-    console.log(this.groups);
+    // console.log(this.nodes);
+    // console.log(this.groups);
     const R = 20;
 
-    this.groups.forEach( g => g.padding = 0.01 );
-    this.group = this.graphLayer.selectAll('.group').data(this.groups);
+    // this.groups.forEach( g => g.padding = 0.01 );
+    // this.group = this.graphLayer.selectAll('.group').data(this.groups);
 
-    this.group.enter()
-      .append('rect')
-      .attr('class', 'group')
-      .attr('rx', 5)
-      .attr('ry', 5)
-      .style('fill', d => "#cccccc" );
+    // this.group.enter()
+    //   .append('rect')
+    //   .attr('class', 'group')
+    //   .attr('rx', 5)
+    //   .attr('ry', 5)
+    //   .style('fill', d => "#cccccc" );
 
     this.link = this.graphLayer.selectAll('.link').data(this.links, d => [d.id, d.weight, d.source, d.target] );
-    // this.link.exit().remove();
+    this.link.exit().remove();
+
     this.link
       .enter()
       .append('line')
@@ -175,52 +176,42 @@ class Graph {
 
 
     this.node = this.graphLayer.selectAll('.node').data(this.nodes, d => [d.id, d.name, d.group] );
-    // this.node.exit().remove();
+    this.node.exit().remove();
 
     this.nodes.forEach( node => { node.width = node.height = 4.5 * R });
 
     this.node.enter()
-      .append('rect')
-      .attr('class', 'node')
+      .append('g')
       .attr('id', d => d.id )
-      .attr("width", d => d.width - 2 )
-      .attr("height", d =>  d.height - 2 )
-      .attr("rx", 5).attr("ry", 5)
+      .attr('class', 'node')
+
+    this.node
+      .append('ellipse')
+      .attr('rx', 2.5*R )
+      .attr('ry', R )
       .style('fill', (d) => {return this.findGroup(d.group).color } );
-      // .call(cola.drag);
-    // this.node.enter()
-    //   .append('g')
-    //   .attr('id', d => d.id )
-    //   .attr('class', 'node')
 
-    // this.node
-    //   .append('ellipse')
-    //   .attr('rx', 2.5*R )
-    //   .attr('ry', R )
-    //   .style('fill', (d) => {return this.findGroup(d.group).color } );
+    this.node.append('text')
+      .text( d => d.name)
+      .attr('dy', '0.35em');
 
-    // this.node.append('text')
-    //   .text( d => d.name)
-    //   .attr('dy', '0.35em');
-
-    // this.node
-    //   .on("click", this.clicked )
-    //   .call( this.simulation.drag()
-    //     .on("dragstart", this.dragStarted)
-    //     .on("drag", this.dragged)
-    //     .on("dragend", (d) => {
-    //       let node = d3.select(`#${d.id}`);
-    //       node.classed("dragging", false);
-    //       // node.attr("cx", d3.event.x).attr("cy", d3.event.y);
-    //       fetchRelated( node.attr('id'), (data) => {
-    //         this.setData(data);
-    //       });
-    //   })
-    // );
+    this.node
+      .on("click", this.clicked )
+      .call( this.simulation.drag()
+        .on("dragstart", this.dragStarted)
+        .on("drag", this.dragged)
+        .on("dragend", (d) => {
+          let node = d3.select(`#${d.id}`);
+          node.classed("dragging", false);
+          // node.attr("cx", d3.event.x).attr("cy", d3.event.y);
+          fetchRelated( node.attr('id'), (data) => {
+            this.setData(data);
+          });
+      })
+    );
 
     this.simulation.start();
   }
-
 
   keepNodesOnTop() {
     const nodes = document.getElementsByClassName("node");
@@ -231,7 +222,6 @@ class Graph {
   }
 
   dragStarted(d) {
-
     d3.event.sourceEvent.stopPropagation();
     d3.select(this).classed("dragging", true);
   }
