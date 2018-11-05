@@ -21,7 +21,8 @@
     "start": "webpack --watch --mode=development",
     "postinstall": "webpack --mode=production",
     "build": "webpack --mode=production --config webpack.config.prod.js",
-    "deploy": "npm run build&&gh-pages -d build"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "keywords": [],
   "author": "",
