@@ -61,11 +61,6 @@ class Graph {
       .attr('y1', d => d.source.y )
       .attr('x2', d => d.target.x )
       .attr('y2', d => d.target.y );
-    // this.group
-    //   .attr('x', d => d.bounds.x )
-    //   .attr('y', d => d.bounds.y)
-    //   .attr('width', d => d.bounds.width())
-    //   .attr('height', d => d.bounds.height());
   }
 
   reset() {
@@ -76,7 +71,6 @@ class Graph {
     this.simulation = this.simulation
       .nodes(this.nodes)
       .links(this.links)
-      // .groups(this.groups)
       .start();
 
   }
@@ -120,7 +114,6 @@ class Graph {
       }
       this.clear();
       this.render();
-      // this.keepNodesOnTop();
     }, 0);
 
     const addNodes = setInterval( () => {
@@ -164,8 +157,6 @@ class Graph {
   }
 
   render() {
-    // console.log(this.nodes);
-    // console.log(this.groups);
     const R = 20;
 
     this.link = this.graphLayer.selectAll('.link').data(this.links, d => [d.id, d.weight, d.source, d.target] );
@@ -208,15 +199,13 @@ class Graph {
         .on("dragend", (d) => {
           let node = d3.select(`#${d.id}`);
           node.classed("dragging", false);
-          // node.attr("cx", d3.event.x).attr("cy", d3.event.y);
           fetchRelated( node.attr('id'), (data) => {
             this.setData(data);
           });
       })
     );
 
-    this.simulation
-      .start();
+    this.simulation.start();
   }
 
   keepNodesOnTop() {
