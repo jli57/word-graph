@@ -15,5 +15,5 @@ app.get('/', function(req, res) {
 app.use("/api/conceptnet", apiConceptNet);
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`)
+  // console.log(`Server is running on port ${port}`)
 });
