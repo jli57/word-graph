@@ -6,11 +6,16 @@
     <script type="text/javascript" src="../src/bundle.js"></script>
   </head>
   <body>
-    <form id="search-form">
-      <input type="text" id="search-text" value=""/>
+    <header>
+      <h1>Word Graph</h1>
+      <h2>choose a word to generate a graph</h2>
+    </header>
+    <form id="search-form" autocomplete="off">
+      <input type="text" id="search-text" value="" placeholder="example" />
       <input type="submit" id="search-btn" value="Search" />
     </form>
     <div id="canvas"></div>
-    <div id="root"></div>
+    <footer>
+    </footer>
   </body>
 </html>

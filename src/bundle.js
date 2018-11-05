@@ -98,7 +98,26 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "body {\n  margin: 0;\n  padding: 0;\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Oxygen\",\n    \"Ubuntu\", \"Cantarell\", \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\",\n    sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}\n\ncode {\n  font-family: source-code-pro, Menlo, Monaco, Consolas, \"Courier New\",\n    monospace;\n}\n\n#search-form input[type=\"text\"] {\n  width: 500px;\n}\n\n\n.node > ellipse {\n  fill: #dddddd;\n}\n\n\n.node > text {\n  font-family: sans-serif;\n  text-anchor: middle;\n  pointer-events: none;\n  font-size: 12px;\n}\n\n.link {\n  stroke: #dddddd;\n  stroke-width: 2px;\n}", ""]);
+exports.push([module.i, "body {\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Oxygen\",\n    \"Ubuntu\", \"Cantarell\", \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\",\n    sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  background: #8f979e;\n  text-align: center;\n  display: flex;\n  flex-direction: column;\n}\n\nheader {\n  /* position: fixed; */\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  height: 80px;\n}\n\nh1 {\n  font-size: 36px;\n  font-weight: bold;\n}\n\nh2 {\n  font-style: italic;\n}\n\nform {\n  margin: 5px;\n  padding: 5px;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n\nform input {\n  border: 1px solid #343d46;\n}\n\nform input[type=\"submit\"] {\n  background: #717f8d;\n  border-radius: 0 5px 5px 0;\n  padding: 5px 15px;\n  border-left: none;\n}\n\nform input[type=\"submit\"]:hover {\n  background: #343d46;\n  color: #cccccc;\n}\n\nform input[type=\"text\"] {\n  background: #cccccc;\n  width: 250px;\n  padding: 5px 10px;\n  text-align: left;\n  border-radius: 5px 0 0 5px;\n}\n\n#canvas {\n  position: absolute;\n  left: 50px;\n  right: 50px;\n  top: 150px;\n  bottom: 50px;\n}\n\n.node > text {\n  font-family: sans-serif;\n  text-anchor: middle;\n  pointer-events: none;\n  font-size: 12px;\n}\n\n.link {\n  stroke: #dddddd;\n  stroke-width: 2px;\n}", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./src/styles/reset.css":
+/*!********************************************************!*\
+  !*** ./node_modules/css-loader!./src/styles/reset.css ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "html, body, header, main, footer, nav,\nsection, article, aside, div, p, span,\nh1, h2, h3, h4, h5,\nul, li, img, button, i, a,\nform, label, input, textarea, time {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  outline: 0;\n  font: inherit;\n  color: inherit;\n  text-align: inherit;\n  text-decoration: inherit;\n  vertical-align: inherit;\n  box-sizing: inherit;\n  background: transparent;\n}\n\nul {\n  list-style: none;\n}\n\nimg {\n  display: block;\n  width: 100%;\n  height: auto;\n}\n\ninput[type=\"password\"],\ninput[type=\"email\"],\ninput[type=\"text\"],\ninput[type=\"submit\"],\ntextarea,\nselect, option,\nbutton {\n  -webkit-appearance: none;\n  -moz-appearance: none;\n  appearance: none;\n}\n\nbutton,\ni,\na,\ninput[type=\"submit\"] {\n  cursor: pointer;\n}\n\ntextarea {\n  resize: none;\n}\n\n/* Clearfix */\n\n.group:after{\n  content: \"\";\n  display: block;\n  clear: both;\n}\n", ""]);
 
 // exports
 
@@ -14941,8 +14960,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(d3__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var webcola__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! webcola */ "./node_modules/webcola/dist/index.js");
 /* harmony import */ var webcola__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(webcola__WEBPACK_IMPORTED_MODULE_1__);
-!(function webpackMissingModule() { var e = new Error("Cannot find module 'd3-scale-chromatic'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
-/* harmony import */ var _util_api_util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../util/api_util */ "./src/util/api_util.js");
+/* harmony import */ var _util_api_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../util/api_util */ "./src/util/api_util.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -14953,30 +14971,41 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 
-
 var Graph =
 /*#__PURE__*/
 function () {
-  function Graph(width, height) {
+  function Graph(canvas) {
     _classCallCheck(this, Graph);
 
-    this.WIDTH = width;
-    this.HEIGHT = height;
+    this.canvas = canvas;
     this.initialize();
   }
 
   _createClass(Graph, [{
     key: "initialize",
     value: function initialize() {
-      var svg = d3__WEBPACK_IMPORTED_MODULE_0__["select"]("#canvas").append("svg").attr("width", this.WIDTH).attr("height", this.HEIGHT).style("border", "1px solid black");
+      var _this = this;
+
+      var svg = d3__WEBPACK_IMPORTED_MODULE_0__["select"]("#canvas").append("svg").attr("width", this.WIDTH).attr("height", this.HEIGHT).style("background", "#343d46").style("border", "1px solid black");
+      this.svg = svg;
       this.graphLayer = svg.append('g');
       this.applyZoom(svg);
       this.node = this.graphLayer.selectAll('.node');
-      this.link = this.graphLayer.selectAll('.link'); // this.group = this.graphLayer.selectAll('.group');
-
+      this.link = this.graphLayer.selectAll('.link');
       this.simulation = webcola__WEBPACK_IMPORTED_MODULE_1__["d3adaptor"]().linkDistance(function (l) {
         return l.weight * 200;
-      }).handleDisconnected(false).size([this.WIDTH, this.HEIGHT]).avoidOverlaps(true);
+      }).handleDisconnected(false).avoidOverlaps(true);
+
+      var redraw = function redraw() {
+        var width = canvas.clientWidth;
+        var height = canvas.clientHeight;
+        svg.attr("width", width).attr("height", height);
+
+        _this.simulation.size([width, height]).start();
+      };
+
+      redraw();
+      window.addEventListener("resize", redraw);
       this.reset();
       this.simulation.on('tick', this.tick.bind(this));
     }
@@ -15021,17 +15050,17 @@ function () {
   }, {
     key: "applyZoom",
     value: function applyZoom(svg) {
-      var _this = this;
+      var _this2 = this;
 
       var zoom = d3__WEBPACK_IMPORTED_MODULE_0__["behavior"].zoom().on('zoom', function () {
-        return _this.graphLayer.attr('transform', "translate(".concat(zoom.translate(), ")scale(").concat(zoom.scale(), ")"));
+        return _this2.graphLayer.attr('transform', "translate(".concat(zoom.translate(), ")scale(").concat(zoom.scale(), ")"));
       });
       svg.call(zoom);
     }
   }, {
     key: "setData",
     value: function setData(data) {
-      var _this2 = this;
+      var _this3 = this;
 
       var colorVal = this.groups.length * 100 % 360;
       var group = {
@@ -15043,7 +15072,7 @@ function () {
       setTimeout(function () {
         var root = data.nodes.shift();
 
-        var node = _this2.findNode(root.id);
+        var node = _this3.findNode(root.id);
 
         group.id = root.id;
 
@@ -15054,17 +15083,17 @@ function () {
           node.group = node.id;
           group.leaves.push(node.index);
         } else {
-          var index = _this2.nodes.length;
+          var index = _this3.nodes.length;
           root.index = index;
 
-          _this2.nodes.push(root);
+          _this3.nodes.push(root);
 
           group.leaves.push(index);
         }
 
-        _this2.clear();
+        _this3.clear();
 
-        _this2.render(); // this.keepNodesOnTop();
+        _this3.render(); // this.keepNodesOnTop();
 
       }, 0);
       var addNodes = setInterval(function () {
@@ -15073,25 +15102,25 @@ function () {
           var node = data.nodes.shift();
           var link = data.links.shift();
 
-          var existingNode = _this2.findNode(node.id);
+          var existingNode = _this3.findNode(node.id);
 
           if (existingNode) {
             index = existingNode.index;
             link.target = existingNode;
           } else {
-            index = _this2.nodes.length;
+            index = _this3.nodes.length;
             node.index = index;
 
-            _this2.nodes.push(node);
+            _this3.nodes.push(node);
           }
 
           group.leaves.push(index);
 
-          _this2.links.push(link);
+          _this3.links.push(link);
 
-          _this2.clear();
+          _this3.clear();
 
-          _this2.render();
+          _this3.render();
         } else {
           clearInterval(addNodes);
         }
@@ -15122,25 +15151,17 @@ function () {
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
       // console.log(this.nodes);
       // console.log(this.groups);
-      var R = 20; // this.groups.forEach( g => g.padding = 0.01 );
-      // this.group = this.graphLayer.selectAll('.group').data(this.groups);
-      // this.group.enter()
-      //   .append('rect')
-      //   .attr('class', 'group')
-      //   .attr('rx', 5)
-      //   .attr('ry', 5)
-      //   .style('fill', d => "#cccccc" );
-
+      var R = 20;
       this.link = this.graphLayer.selectAll('.link').data(this.links, function (d) {
         return [d.id, d.weight, d.source, d.target];
       });
       this.link.exit().remove();
       this.link.enter().append('line').attr('class', 'link').style('stroke', function (d) {
-        return "hsl(".concat(_this3.findGroup(d.source.group).colorVal, ",50%,").concat(d.weight * 100, "%)");
+        return "hsl(".concat(_this4.findGroup(d.source.group).colorVal, ",50%,").concat(d.weight * 100, "%)");
       });
       this.node = this.graphLayer.selectAll('.node').data(this.nodes, function (d) {
         return [d.id, d.name, d.group];
@@ -15153,7 +15174,7 @@ function () {
         return d.id;
       }).attr('class', 'node');
       this.node.append('ellipse').attr('rx', 2.5 * R).attr('ry', R).style('fill', function (d) {
-        return _this3.findGroup(d.group).color;
+        return _this4.findGroup(d.group).color;
       });
       this.node.append('text').text(function (d) {
         return d.name;
@@ -15162,8 +15183,8 @@ function () {
         var node = d3__WEBPACK_IMPORTED_MODULE_0__["select"]("#".concat(d.id));
         node.classed("dragging", false); // node.attr("cx", d3.event.x).attr("cy", d3.event.y);
 
-        Object(_util_api_util__WEBPACK_IMPORTED_MODULE_3__["fetchRelated"])(node.attr('id'), function (data) {
-          _this3.setData(data);
+        Object(_util_api_util__WEBPACK_IMPORTED_MODULE_2__["fetchRelated"])(node.attr('id'), function (data) {
+          _this4.setData(data);
         });
       }));
       this.simulation.start();
@@ -15232,19 +15253,21 @@ function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _styles_index_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./styles/index.css */ "./src/styles/index.css");
-/* harmony import */ var _styles_index_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_styles_index_css__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _util_api_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util/api_util */ "./src/util/api_util.js");
-/* harmony import */ var _d3_graph__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./d3/graph */ "./src/d3/graph.js");
+/* harmony import */ var _styles_reset_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./styles/reset.css */ "./src/styles/reset.css");
+/* harmony import */ var _styles_reset_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_styles_reset_css__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _styles_index_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./styles/index.css */ "./src/styles/index.css");
+/* harmony import */ var _styles_index_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_styles_index_css__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _util_api_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./util/api_util */ "./src/util/api_util.js");
+/* harmony import */ var _d3_graph__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./d3/graph */ "./src/d3/graph.js");
+
 
 
 
 document.addEventListener('DOMContentLoaded', function () {
-  var HEIGHT = 800;
-  var WIDTH = 1000;
+  var canvas = document.getElementById("canvas");
   var word = "example";
-  var graph = new _d3_graph__WEBPACK_IMPORTED_MODULE_2__["default"](WIDTH, HEIGHT);
-  Object(_util_api_util__WEBPACK_IMPORTED_MODULE_1__["fetchRelated"])(word, function (data) {
+  var graph = new _d3_graph__WEBPACK_IMPORTED_MODULE_3__["default"](canvas);
+  Object(_util_api_util__WEBPACK_IMPORTED_MODULE_2__["fetchRelated"])(word, function (data) {
     graph.reset();
     graph.setData(data);
   });
@@ -15253,11 +15276,13 @@ document.addEventListener('DOMContentLoaded', function () {
     e.preventDefault();
     var searchText = document.getElementById("search-text");
     word = searchText.value;
-    Object(_util_api_util__WEBPACK_IMPORTED_MODULE_1__["fetchRelated"])(word, function (data) {
+    Object(_util_api_util__WEBPACK_IMPORTED_MODULE_2__["fetchRelated"])(word, function (data) {
       graph.reset();
       graph.setData(data);
     });
   });
+  var chartDiv = document.getElementById("chart");
+  var svg = d3.select(chartDiv).append("svg");
 });
 
 /***/ }),
@@ -15271,6 +15296,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 var content = __webpack_require__(/*! !../../node_modules/css-loader!./index.css */ "./node_modules/css-loader/index.js!./src/styles/index.css");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./src/styles/reset.css":
+/*!******************************!*\
+  !*** ./src/styles/reset.css ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../node_modules/css-loader!./reset.css */ "./node_modules/css-loader/index.js!./src/styles/reset.css");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 

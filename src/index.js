@@ -1,18 +1,22 @@
+import './styles/reset.css';
 import './styles/index.css';
 import { fetchRelated } from './util/api_util';
 import Graph from './d3/graph';
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  const HEIGHT = 800;
-  const WIDTH = 1000;
+  const canvas  = document.getElementById("canvas");
   let word = "example";
-  const graph = new Graph(WIDTH, HEIGHT);
+  const graph = new Graph(canvas);
+
+
+
 
   fetchRelated(word, (data) => {
     graph.reset();
     graph.setData(data);
   });
+
 
   const searchForm = document.getElementById("search-form");
 
@@ -26,4 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
       graph.setData(data);
     });
   });
+
+
+
+  var chartDiv = document.getElementById("chart");
+  var svg = d3.select(chartDiv).append("svg");
+
+
 });

@@ -4,31 +4,47 @@ import { fetchRelated } from '../util/api_util';
 
 class Graph {
 
-  constructor(width, height) {
-    this.WIDTH = width;
-    this.HEIGHT = height;
+  constructor(canvas) {
+    this.canvas = canvas;
     this.initialize();
   }
 
   initialize() {
+
     const svg = d3.select("#canvas")
       .append("svg")
       .attr("width", this.WIDTH)
       .attr("height", this.HEIGHT)
+      .style("background", "#343d46")
       .style("border", "1px solid black");
 
+    this.svg = svg;
     this.graphLayer = svg.append('g');
     this.applyZoom(svg);
 
     this.node = this.graphLayer.selectAll('.node');
     this.link = this.graphLayer.selectAll('.link');
-    // this.group = this.graphLayer.selectAll('.group');
+
 
     this.simulation = cola.d3adaptor()
       .linkDistance( (l) => l.weight*200 )
       .handleDisconnected(false)
-      .size([this.WIDTH, this.HEIGHT])
       .avoidOverlaps(true);
+
+    const redraw = () => {
+      var width = canvas.clientWidth;
+      var height = canvas.clientHeight;
+      svg
+        .attr("width", width)
+        .attr("height", height);
+
+      this.simulation
+        .size([width, height])
+        .start();
+    }
+    redraw();
+
+    window.addEventListener("resize", redraw);
 
     this.reset();
 
@@ -152,16 +168,6 @@ class Graph {
     // console.log(this.groups);
     const R = 20;
 
-    // this.groups.forEach( g => g.padding = 0.01 );
-    // this.group = this.graphLayer.selectAll('.group').data(this.groups);
-
-    // this.group.enter()
-    //   .append('rect')
-    //   .attr('class', 'group')
-    //   .attr('rx', 5)
-    //   .attr('ry', 5)
-    //   .style('fill', d => "#cccccc" );
-
     this.link = this.graphLayer.selectAll('.link').data(this.links, d => [d.id, d.weight, d.source, d.target] );
     this.link.exit().remove();
 
@@ -209,7 +215,8 @@ class Graph {
       })
     );
 
-    this.simulation.start();
+    this.simulation
+      .start();
   }
 
   keepNodesOnTop() {
