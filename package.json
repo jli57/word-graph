@@ -18,6 +18,8 @@
   },
   "scripts": {
     "start": "webpack --watch --mode=development",
+    "build:webpack": "NODE_ENV=production webpack --config webpack.prod.config.js",
+    "build": "npm run clean && npm run build:webpack",
     "postinstall": "webpack --mode=production"
   },
   "keywords": [],
