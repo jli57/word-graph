@@ -20,8 +20,8 @@
   "scripts": {
     "start": "webpack --watch --mode=development",
     "postinstall": "webpack --mode=production",
-    "build": "webpack --config webpack.config.prod.js",
-    "deploy": "gh-pages -d build"
+    "build": "webpack --mode=production --config webpack.config.prod.js",
+    "deploy": "npm run build&&gh-pages -d build"
   },
   "keywords": [],
   "author": "",
