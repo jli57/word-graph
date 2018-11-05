@@ -68,6 +68,7 @@ class Graph {
   reset() {
     this.links = [];
     this.nodes = [];
+    this.groups = [];
 
     this.simulation = this.simulation
       .nodes(this.nodes)
