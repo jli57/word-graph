@@ -6,10 +6,10 @@ const ajax = (options, callback) => {
   xhr.onreadystatechange = function() {
     if ( xhr.readyState === DONE ) {
       if ( xhr.status === OK ) {
-        console.log("success");
+        // console.log("success");
         callback(xhr.response);
       } else {
-        console.log('request has failed', xhr.status);
+        // console.log('request has failed', xhr.status);
       }
     }
   }

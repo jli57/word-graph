@@ -229,7 +229,6 @@ class Graph {
 
   addLink(link) {
     link.id = this.links.length + 1;
-    console.log(link);
     this.links.push(link);
   }
 
@@ -243,7 +242,7 @@ class Graph {
   }
 
   clicked() {
-    console.log("click", d3.event );
+    // console.log("click", d3.event );
     if ( d3.event.defaultPevented ) return;
   }
 

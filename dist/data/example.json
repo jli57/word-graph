@@ -1,0 +1,85 @@
+{
+  "@id": "/c/en/example",
+  "related": [
+    {
+      "@id": "/c/en/example",
+      "weight": 1.0
+    },
+    {
+      "@id": "/c/en/examples",
+      "weight": 0.834
+    },
+    {
+      "@id": "/c/en/instance",
+      "weight": 0.718
+    },
+    {
+      "@id": "/c/en/exemplar",
+      "weight": 0.691
+    },
+    {
+      "@id": "/c/en/exemplary",
+      "weight": 0.624
+    },
+    {
+      "@id": "/c/en/exemplification",
+      "weight": 0.617
+    },
+    {
+      "@id": "/c/en/v.g",
+      "weight": 0.612
+    },
+    {
+      "@id": "/c/en/role_model",
+      "weight": 0.593
+    },
+    {
+      "@id": "/c/en/role_models",
+      "weight": 0.573
+    },
+    {
+      "@id": "/c/en/exemplified",
+      "weight": 0.544
+    },
+    {
+      "@id": "/c/en/instances",
+      "weight": 0.538
+    },
+    {
+      "@id": "/c/en/for_example",
+      "weight": 0.523
+    },
+    {
+      "@id": "/c/en/model",
+      "weight": 0.492
+    },
+    {
+      "@id": "/c/en/e.g",
+      "weight": 0.478
+    },
+    {
+      "@id": "/c/en/illustrative",
+      "weight": 0.472
+    },
+    {
+      "@id": "/c/en/embodiment",
+      "weight": 0.466
+    },
+    {
+      "@id": "/c/en/embodiments",
+      "weight": 0.45
+    },
+    {
+      "@id": "/c/en/model_airplane",
+      "weight": 0.448
+    },
+    {
+      "@id": "/c/en/heidi_klum",
+      "weight": 0.428
+    },
+    {
+      "@id": "/c/en/specimen",
+      "weight": 0.427
+    }
+  ]
+}
