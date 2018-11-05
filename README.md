@@ -27,7 +27,7 @@ WordCloud will allow users to:
 
 ### Wireframe
 
-<img src="./docs/wireframe.png" width="600px"/>
+<img src="./images/wireframe.png" width="600px"/>
 
 ## Implementation Timeline
 
