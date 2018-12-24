@@ -9,7 +9,7 @@
     "server-inspect": "nodemon --inspect app.js",
     "frontend-install": "npm install --prefix frontend",
     "frontend": "npm start --prefix frontend",
-    "dev": "npm run server && npm run frontend",
+    "dev": "concurrently \"npm run server\" \"npm run frontend\"",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
   },
   "repository": {
@@ -25,6 +25,7 @@
   "homepage": "https://github.com/jli57/word-graph#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "concurrently": "^4.1.0",
     "express": "^4.16.4",
     "request": "^2.88.0"
   },
